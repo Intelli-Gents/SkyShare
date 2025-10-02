@@ -89,14 +89,13 @@ export default function DashboardPage() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Airline Dashboard</h1>
-              <p className="text-gray-600 dark:text-gray-300 mt-1">AI-powered analytics and optimization insights</p>
+              <h1 className="text-3xl font-bold text-[#273f4f] dark:text-white">Airline Dashboard</h1>             
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                 Live Data
               </Badge>
-              <Button variant="outline">Export Report</Button>
+              <Button variant="outline" className="hover:bg-[#d7d7d7]">Export Report</Button>
             </div>
           </div>
         </div>
