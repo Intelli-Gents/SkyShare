@@ -21,7 +21,7 @@ export default function HomePage() {
             </div>
           </div>
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-6 text-balance">
-            Airline Route Optimizer
+            SkyShare
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto text-pretty">
             AI-powered analytics platform that maximizes seat utilization,

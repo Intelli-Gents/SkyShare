@@ -1,79 +1,85 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { TrendingUp, TrendingDown, Zap, Clock, Bell } from "lucide-react"
-import type { PriceUpdate } from "@/lib/pricing-system"
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { TrendingUp, TrendingDown, Zap, Clock, Bell } from "lucide-react";
+import type { PriceUpdate } from "@/lib/pricing-system";
 
 interface RealTimePricingProps {
-  flightId?: string
-  showHistory?: boolean
+  flightId?: string;
+  showHistory?: boolean;
 }
 
-export function RealTimePricing({ flightId, showHistory = false }: RealTimePricingProps) {
-  const [priceUpdates, setPriceUpdates] = useState<PriceUpdate[]>([])
-  const [bestDeals, setBestDeals] = useState<PriceUpdate[]>([])
-  const [loading, setLoading] = useState(true)
-  const [lastUpdate, setLastUpdate] = useState<Date>(new Date())
+export function RealTimePricing({
+  flightId,
+  showHistory = false,
+}: RealTimePricingProps) {
+  const [priceUpdates, setPriceUpdates] = useState<PriceUpdate[]>([]);
+  const [bestDeals, setBestDeals] = useState<PriceUpdate[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
   useEffect(() => {
     const fetchPricing = async () => {
       try {
-        const url = flightId ? `/api/pricing/real-time?flightId=${flightId}` : "/api/pricing/real-time"
-        const response = await fetch(url)
-        const data = await response.json()
+        const url = flightId
+          ? `/api/pricing/real-time?flightId=${flightId}`
+          : "/api/pricing/real-time";
+        const response = await fetch(url);
+        const data = await response.json();
 
         if (data.success) {
           if (flightId) {
-            setPriceUpdates([data.priceUpdate])
+            setPriceUpdates([data.priceUpdate]);
           } else {
-            setPriceUpdates(data.priceUpdates)
-            setBestDeals(data.bestDeals)
+            setPriceUpdates(data.priceUpdates);
+            setBestDeals(data.bestDeals);
           }
-          setLastUpdate(new Date())
+          setLastUpdate(new Date());
         }
       } catch (error) {
-        console.error("Failed to fetch pricing:", error)
+        console.error("Failed to fetch pricing:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchPricing()
+    fetchPricing();
 
     // Set up real-time updates every 30 seconds
-    const interval = setInterval(fetchPricing, 30000)
-    return () => clearInterval(interval)
-  }, [flightId])
+    const interval = setInterval(fetchPricing, 30000);
+    return () => clearInterval(interval);
+  }, [flightId]);
 
   const getPriceChangeIcon = (oldPrice: number, newPrice: number) => {
     if (newPrice < oldPrice) {
-      return <TrendingDown className="h-4 w-4 text-green-600" />
+      return <TrendingDown className="h-4 w-4 text-green-600" />;
     } else if (newPrice > oldPrice) {
-      return <TrendingUp className="h-4 w-4 text-red-600" />
+      return <TrendingUp className="h-4 w-4 text-red-600" />;
     }
-    return null
-  }
+    return null;
+  };
 
   const getPriceChangeColor = (oldPrice: number, newPrice: number) => {
-    if (newPrice < oldPrice) return "text-green-600"
-    if (newPrice > oldPrice) return "text-red-600"
-    return "text-gray-600"
-  }
+    if (newPrice < oldPrice) return "text-green-600";
+    if (newPrice > oldPrice) return "text-red-600";
+    return "text-gray-600";
+  };
 
-  const formatTimeAgo = (date: Date) => {
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffMins = Math.floor(diffMs / 60000)
+  const formatTimeAgo = (dateInput: string | number | Date) => {
+  const date = new Date(dateInput); // ✅ force it into a Date
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
 
-    if (diffMins < 1) return "Just now"
-    if (diffMins < 60) return `${diffMins}m ago`
-    const diffHours = Math.floor(diffMins / 60)
-    if (diffHours < 24) return `${diffHours}h ago`
-    return `${Math.floor(diffHours / 24)}d ago`
-  }
+  if (diffMins < 1) return "Just now";
+  if (diffMins < 60) return `${diffMins} min ago`;
+  const diffHrs = Math.floor(diffMins / 60);
+  return `${diffHrs} hr${diffHrs > 1 ? "s" : ""} ago`;
+};
+
 
   if (loading) {
     return (
@@ -85,7 +91,7 @@ export function RealTimePricing({ flightId, showHistory = false }: RealTimePrici
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -113,12 +119,19 @@ export function RealTimePricing({ flightId, showHistory = false }: RealTimePrici
                       variant={update.discount > 0 ? "default" : "secondary"}
                       className={update.discount > 0 ? "bg-green-600" : ""}
                     >
-                      {update.discount > 0 ? `-${update.discount}%` : "No discount"}
+                      {update.discount > 0
+                        ? `-${update.discount}%`
+                        : "No discount"}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-2">
                     {getPriceChangeIcon(update.oldPrice, update.newPrice)}
-                    <span className={`font-medium ${getPriceChangeColor(update.oldPrice, update.newPrice)}`}>
+                    <span
+                      className={`font-medium ${getPriceChangeColor(
+                        update.oldPrice,
+                        update.newPrice
+                      )}`}
+                    >
                       ${update.newPrice}
                     </span>
                   </div>
@@ -127,15 +140,21 @@ export function RealTimePricing({ flightId, showHistory = false }: RealTimePrici
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Previous Price</p>
-                    <p className="text-lg font-medium line-through text-gray-500">${update.oldPrice}</p>
+                    <p className="text-lg font-medium line-through text-gray-500">
+                      ${update.oldPrice}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Current Price</p>
-                    <p className="text-lg font-bold text-blue-600">${update.newPrice}</p>
+                    <p className="text-lg font-bold text-blue-600">
+                      ${update.newPrice}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 mb-1">You Save</p>
-                    <p className="text-lg font-bold text-green-600">${update.oldPrice - update.newPrice}</p>
+                    <p className="text-lg font-bold text-green-600">
+                      ${update.oldPrice - update.newPrice}
+                    </p>
                   </div>
                 </div>
 
@@ -153,7 +172,11 @@ export function RealTimePricing({ flightId, showHistory = false }: RealTimePrici
                 {/* Valid until countdown */}
                 <div className="mt-3 pt-3 border-t">
                   <div className="flex items-center justify-between text-xs text-gray-500">
-                    <span>Price valid until: {update.validUntil.toLocaleTimeString()}</span>
+                    <span>
+                      Price valid until:{" "}
+                      {new Date(update.validUntil).toLocaleTimeString()}
+                    </span>
+
                     <span>Updated: {formatTimeAgo(update.timestamp)}</span>
                   </div>
                 </div>
@@ -178,12 +201,18 @@ export function RealTimePricing({ flightId, showHistory = false }: RealTimePrici
                 <div key={index} className="border rounded-lg p-3">
                   <div className="flex items-center justify-between mb-2">
                     <Badge variant="outline">Flight {deal.flightId}</Badge>
-                    <Badge className="bg-red-600 text-white">-{deal.discount}%</Badge>
+                    <Badge className="bg-red-600 text-white">
+                      -{deal.discount}%
+                    </Badge>
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600 line-through">${deal.oldPrice}</p>
-                      <p className="text-lg font-bold text-green-600">${deal.newPrice}</p>
+                      <p className="text-sm text-gray-600 line-through">
+                        ${deal.oldPrice}
+                      </p>
+                      <p className="text-lg font-bold text-green-600">
+                        ${deal.newPrice}
+                      </p>
                     </div>
                     <Button size="sm">Book</Button>
                   </div>
@@ -194,5 +223,5 @@ export function RealTimePricing({ flightId, showHistory = false }: RealTimePrici
         </Card>
       )}
     </div>
-  )
+  );
 }
