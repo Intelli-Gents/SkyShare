@@ -219,28 +219,24 @@ export default function CommunityPage() {
         <div className="flex flex-wrap items-center justify-between mb-8 p-4 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg">
           <div className="flex items-center gap-6">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">{filteredDeals.length}</div>
-              <div className="text-sm text-gray-600">Available Deals</div>
+              <div className="text-2xl font-bold text-[#fe7743]">{filteredDeals.length}</div>
+              <div className="text-sm text-[#273f4f]">Available Deals</div>
             </div>
             <Separator orientation="vertical" className="h-12" />
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-[#Fe7743]">
                 {Math.round(filteredDeals.reduce((sum, deal) => sum + deal.discount, 0) / filteredDeals.length)}%
               </div>
-              <div className="text-sm text-gray-600">Avg Discount</div>
+              <div className="text-sm text-[#273f4f]">Average Discount</div>
             </div>
             <Separator orientation="vertical" className="h-12" />
             <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">
+              <div className="text-2xl font-bold text-[#fe7743]">
                 ${Math.round(filteredDeals.reduce((sum, deal) => sum + deal.savingsAmount, 0) / filteredDeals.length)}
               </div>
-              <div className="text-sm text-gray-600">Avg Savings</div>
+              <div className="text-sm text-[#273f4f]">Average Savings</div>
             </div>
           </div>
-          <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
-            <Zap className="mr-1 h-3 w-3" />
-            AI-Powered Deals
-          </Badge>
         </div>
 
         {/* Deals List */}
@@ -305,7 +301,7 @@ export default function CommunityPage() {
                         <TrendingDown className="h-4 w-4" />
                         <span className="font-medium">Save ${deal.savingsAmount}</span>
                       </div>
-                      <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+                      <Button size="lg" className="bg-[#fe7743] hover:bg-[#447d9b]">
                         Book Now
                       </Button>
                     </div>
@@ -321,7 +317,7 @@ export default function CommunityPage() {
                     </div>
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                      <span>Community Verified Deal</span>
+                      <Star className="h-4 w-4 text-yellow-500 fill-current" />
                     </div>
                   </div>
                 </div>

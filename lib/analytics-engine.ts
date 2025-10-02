@@ -44,7 +44,7 @@ export class SeatUtilizationPredictor {
 
   private static getRoutePopularityMultiplier(origin: string, destination: string): number {
     // Simulate route popularity based on major airports
-    const majorAirports = ["JFK", "LAX", "ORD", "ATL", "DFW", "DEN", "SFO", "LAS"]
+    const majorAirports = ["KGL", "EBB", "QTR", "NBO", "JNB"]
     const originMajor = majorAirports.includes(origin)
     const destMajor = majorAirports.includes(destination)
 
